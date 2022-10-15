@@ -10,7 +10,7 @@ const initialState: CounterState = {
 };
 
 export const questionSlice = createSlice({
-  name: "counter",
+  name: "poll",
   initialState,
   reducers: {
     increment: (state) => {
