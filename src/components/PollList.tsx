@@ -1,51 +1,29 @@
-import { ChildProcess } from "child_process";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {getDate} from "../utils/date";
+import {getChoiceId} from "../utils/getChoiceId";
+import {IChoice , IPoll} from "../types";
 
-interface IChoice {
-  choice: string;
-  votes: number;
-  url: string;
-}
 const PollList = ({
-  polls,
+  polls = [],
   error,
   isLoading,
 }: {
-  polls: {
-    published_at: string;
-    question: string;
-    choices: IChoice[];
-    url: string;
-  }[];
+  polls?: IPoll[];
   error?: Object;
   isLoading: boolean;
 }) => {
-  const [answers, setAnswer] = useState<(IChoice & { choiceId: string })[] | []>(
-    []
-  );
-console.log("answer", answers)
-  const getDate = (date: string) => {
-    return new Date(date).toISOString().substring(0, 10);
-  };
-
-  const getChoiceId = (url: string = "") => {
-    var n = url.lastIndexOf("/");
-    return url.substring(n + 1);
-  };
-  const handleSubmitAnswer = () => {};
 
   const renderQuestion = () =>
-    polls?.map((poll) => {
+    polls.map((poll) => {
       return (
-        <div style={{ padding: "1rem 1rem 0 4rem" }}>
+        <div style={{ padding: "1rem 1rem 0 4rem" }} key={poll.url}>
           <div style={{ paddingBottom: "1rem" }}>
             {getDate(poll.published_at)}
           </div>
           <div style={{ paddingBottom: "1rem", fontWeight: "800" }}>
             {poll.question}
           </div>
-          <form style={{ padding: "1rem 0.5rem" }}>
-            <fieldset id="choices" style={{ lineHeight: "2rem" }}>
+           <ul style={{ padding: "1rem 0.5rem",lineHeight: "2rem" }}>
               {poll.choices.map((choice) => {
                 const answeredQuestion = {
                   choiceId: getChoiceId(choice.url),
@@ -54,22 +32,12 @@ console.log("answer", answers)
                   choice: choice.choice,
                 };
                 return (
-                  <section>
-                    <input
-                      type="radio"
-                      id={choice.choice}
-                      name="choices"
-                      value={choice.choice}
-                      onClick={() =>
-                        setAnswer((state) => [answeredQuestion, ...state])
-                      }
-                    />
-                    <label htmlFor={choice.choice}>{choice.choice}</label>
-                  </section>
+                  <li key={choice.url}>
+                   {choice.choice}
+                  </li>
                 );
               })}
-            </fieldset>
-          </form>
+          </ul>
           <section
             style={{
               display: "flex",
@@ -77,16 +45,13 @@ console.log("answer", answers)
               padding: "1rem",
             }}
           >
-            <button onClick={() => handleSubmitAnswer()}>
-              Submit Your Answer
-            </button>
-            <a href={poll.url}>Poll Detail</a>
+            <Link to={poll.url}>Poll Detail</Link>
           </section>
           <hr style={{ margin: "2rem 0", border: "2px solid" }} />
         </div>
       );
     });
-  return <div>{polls && polls.length && renderQuestion()}</div>;
+  return <div>{renderQuestion()}</div>;
 };
 
 export default PollList;
