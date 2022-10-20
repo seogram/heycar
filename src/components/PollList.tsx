@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {  SerializedError} from "@reduxjs/toolkit";
+
 import { getDate } from "../utils/date";
 import { IPoll } from "../types";
 import styled from "styled-components";
@@ -57,7 +60,7 @@ const PollList = ({
   error,
 }: {
   polls?: IPoll[];
-  error?: Object;
+  error?: FetchBaseQueryError | SerializedError;
   isLoading: boolean;
 }) => {
   const renderQuestion = () =>
