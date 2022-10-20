@@ -49,10 +49,11 @@ const Button = styled.button`
 
 const PollDetail = () => {
   const { questionId } = useParams();
+  console.log()
   const { data, error, isLoading } = useGetSingleQuestionQuery(
     questionId || ""
-  );
-
+  ) || {};
+console.log(useGetSingleQuestionQuery(""))
   const [answerPoll] = useAnswerPollMutation();
 
   const getlVotesPercent = (votes: number) => {

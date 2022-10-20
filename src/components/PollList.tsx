@@ -67,7 +67,7 @@ const PollList = ({
           <DateWrapper>
             {getDate(poll.published_at)}
           </DateWrapper>
-          <QuestionTitle>{poll.question}</QuestionTitle>
+          <QuestionTitle data-testid="title">{poll.question}</QuestionTitle>
           <ChoiceWrapper>
             {poll.choices.map((choice) => {
               return <li key={choice.url}>{choice.choice}</li>;
